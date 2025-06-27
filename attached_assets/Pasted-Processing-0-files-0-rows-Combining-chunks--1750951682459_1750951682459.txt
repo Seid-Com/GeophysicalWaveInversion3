@@ -1,0 +1,70 @@
+Processing 0 files -> 0 rows...
+Combining chunks...
+
+---------------------------------------------------------------------------
+ValueError                                Traceback (most recent call last)
+Cell In[17], line 1
+----> 1 submission_df = kaggle_gen.create_submission_from_predictions(
+      2     predictions=predictions,
+      3     output_path="my_submission.csv"
+      4 )
+
+File ~\Documents\GeophysicalWaveInversion\utils\kaggle_submission.py:80, in KaggleSubmissionGenerator.create_submission_from_predictions(self, predictions, output_path, chunk_size)
+     78 # Combine all chunks efficiently
+     79 print("Combining chunks...")
+---> 80 submission_df = pd.concat(chunk_dfs, ignore_index=True)
+     82 # Sort by oid_ypos for consistency
+     83 print("Sorting rows...")
+
+File C:\ProgramData\anaconda3\Lib\site-packages\pandas\core\reshape\concat.py:382, in concat(objs, axis, join, ignore_index, keys, levels, names, verify_integrity, sort, copy)
+    379 elif copy and using_copy_on_write():
+    380     copy = False
+--> 382 op = _Concatenator(
+    383     objs,
+    384     axis=axis,
+    385     ignore_index=ignore_index,
+    386     join=join,
+    387     keys=keys,
+    388     levels=levels,
+    389     names=names,
+    390     verify_integrity=verify_integrity,
+    391     copy=copy,
+    392     sort=sort,
+    393 )
+    395 return op.get_result()
+
+File C:\ProgramData\anaconda3\Lib\site-packages\pandas\core\reshape\concat.py:445, in _Concatenator.__init__(self, objs, axis, join, keys, levels, names, ignore_index, verify_integrity, copy, sort)
+    442 self.verify_integrity = verify_integrity
+    443 self.copy = copy
+--> 445 objs, keys = self._clean_keys_and_objs(objs, keys)
+    447 # figure out what our result ndim is going to be
+    448 ndims = self._get_ndims(objs)
+
+File C:\ProgramData\anaconda3\Lib\site-packages\pandas\core\reshape\concat.py:507, in _Concatenator._clean_keys_and_objs(self, objs, keys)
+    504     objs_list = list(objs)
+    506 if len(objs_list) == 0:
+--> 507     raise ValueError("No objects to concatenate")
+    509 if keys is None:
+    510     objs_list = list(com.not_none(*objs_list))
+
+ValueError: No objects to concatenate
+
+!python validate_submission.py
+
+============================================================
+KAGGLE FWI SUBMISSION VALIDATION
+============================================================
+
+1. TEST DATA VALIDATION
+------------------------------
+
+Traceback (most recent call last):
+  File "C:\Users\Kasish\Documents\GeophysicalWaveInversion\validate_submission.py", line 160, in <module>
+    success = validate_submission_requirements()
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Kasish\Documents\GeophysicalWaveInversion\validate_submission.py", line 34, in validate_submission_requirements
+    print(f"\u274c Test directory not found: {test_dir}")
+  File "C:\ProgramData\anaconda3\Lib\encodings\cp1252.py", line 19, in encode
+    return codecs.charmap_encode(input,self.errors,encoding_table)[0]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+UnicodeEncodeError: 'charmap' codec can't encode character '\u274c' in position 0: character maps to <undefined>
